@@ -15,31 +15,10 @@
 //= require turbolinks
 //= require_tree .
 
+
 $(function(){
 	$("#doughnutChart").drawDoughnutChart(
- 		[	
-	 		{title: "haroldiv@gmail.com",						 		 value: 15,  			color: "#2C3E50"},
-			{title: "update+k-7m7hi_@facebookmail.com",				 value: 15,  			color: "#FC4349"},
-			{title: "graham@wantowle.com",							 value: 15,  			color: "#FC4349"},
-			{title: "info@meetup.com",								 value: 15,  			color: "#D7DADB"},
-			{title: "graham@pickup101.com",							 value: 15,  			color: "#6DBCDB"},
-			{title: "reminder@e.gilt.com",							 value: 15,  			color: "#D7DADB"},
-			{title: "acfancypants@gmail.com",						 value: 15,  			color: "#2C3E50"},
-			{title: "deals@livingsocial.com",						 value: 15,  			color: "#FFF"},
-			{title: "info@barackobama.com",							 value: 15,  			color: "#FFF"},
-			{title: "notification+k-~m~hi_@facebookmail.com",		 value: 15,  			color: "#FC4349"},
-			{title: "bounces@mail1 .oknotify2.com",					 value: 20,  			color: "#2C3E50"},
-			{title: "members@azemails.com",							 value: 35,  			color: "#6DBCDB"},
-			{title: "mail@e.groupon.com",							 value: 12,  			color: "#FFF"},
-			{title: "reminder@giltgroupe.com",						 value: 9,   			color: "#2C3E50"},
-			{title: "rollup@unroll.me",							 	 value: 40,  			color: "#FFF"},
-			{title: "groups-noreply@linkedin.com",					 value: 120, 			color: "#FFF"},
-			{title: "eflyer@eflyermarketing.com",					 value: 30,  			color: "#6DBCDB"},
-			{title: "autonotify@flexmls.com",						 value: 57,  			color: "#FFF"},
-			{title: "hcruse@sfsmail.com",							 value: 19,  			color: "#D7DADB"},
-			{title: "specials@papajohns-specials.com",				 value: 33,  			color: "#6DBCDB"},
-			{title: "dave@davenetics.com",							 value: 112, 			color: "#FFF"},
-	 	]
+     jsData
   	);
 });
 

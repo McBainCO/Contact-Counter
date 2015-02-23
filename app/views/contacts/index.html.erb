@@ -5,33 +5,14 @@
   <title>Hello Bubble Chart</title>
   <meta charset="utf-8">
 
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,200italic,600italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
   
-  <script src="http://phuonghuynh.github.io/js/bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/d3-transform/src/d3-transform.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/extarray.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/misc.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/micro-observer.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/microplugin/src/microplugin.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/bubble-chart.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/central-click/central-click.js"></script>
-  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/lines/lines.js"></script>
-  
+ 
   <style>
-    .bubbleChart {
-      min-width: 100px;
-      max-width: 700px;
-      height: 700px;
-      margin: 0 auto;
-    }
-    .bubbleChart svg{
-      background: #000000;
-    }
+     
   </style>
 </head>
 <body style="background: #000000">
-<div class="bubbleChart"/>
+<div id="doughnutChart" class="chart"></div>
 </body>
 
 <script>
@@ -62,92 +43,91 @@
                  //  {text: "customercare@pof.com", count: "10"},
                  //  {text: "dave@davenetics.com", count: "10"},
 		];
-$(document).ready(function () {
-  var bubbleChart = new d3.svg.BubbleChart({
-    supportResponsive: true,
-    //container: => use @default
-    size: 600,
-    //viewBoxSize: => use @default
-    innerRadius: 16000 / 3.5,
-    //outerRadius: => use @default
-    radiusMin: 1500,
-    //radiusMax: use @default
-    //intersectDelta: use @default
-    //intersectInc: use @default
-    //circleColor: use @default
+var randArray = function() {
 
-    data: {
-      items: jsonData ,
-      eval: function (item) {return item.count;},
-      classed: function (item) {return item.text;}
-    },
-    plugins: [
-      {
-        name: "central-click",
-        options: {
-          text: "(See more detail)",
-          style: {
-            "font-size": "12px",
-            "font-style": "italic",
-            "font-family": "Source Sans Pro, sans-serif",
-            //"font-weight": "700",
-            "text-anchor": "middle",
-            "fill": "white"
-          },
-          attr: {dy: "65px"},
-          centralClick: function() {
-            alert("Here is more details!!");
-          }
-        }
-      },
-      {
-        name: "lines",
-        options: {
-          format: [
-            {// Line #0
-              textField: "count",
-              classed: {count: true},
-              style: {
-                "font-size": "28px",
-                "font-family": "Source Sans Pro, sans-serif",
-                "text-anchor": "middle",
-                fill: "white"
-              },
-              attr: {
-                dy: "0px",
-                x: function (d) {return d.cx;},
-                y: function (d) {return d.cy;}
-              }
-            },
-            {// Line #1
-              textField: "text",
-              classed: {text: true},
-              style: {
-                "font-size": "14px",
-                "font-family": "Source Sans Pro, sans-serif",
-                "text-anchor": "middle",
-                fill: "white"
-              },
-              attr: {
-                dy: "20px",
-                x: function (d) {return d.cx;},
-                y: function (d) {return d.cy;}
-              }
-            }
-          ],
-          centralFormat: [
-            {// Line #0
-              style: {"font-size": "50px"},
-              attr: {}
-            },
-            {// Line #1
-              style: {"font-size": "30px"},
-              attr: {dy: "40px"}
-            }
-          ]
-        }
-      }]
-  });
+    for(var i = 0, array = new Array(); i<10; i++) {
+        array.push(Math.floor(Math.random()*10 + 1))
+    }
+    return array
+}
+
+var initRandArray = randArray();
+var newArray;
+
+
+
+var w = 500;
+var h = 200;
+var barPadding = 1;
+var mAx = d3.max(initRandArray)
+var yScale = d3.scale.linear()
+                .domain([0, mAx])
+                .range([0, h])
+
+var svg = d3.select("section")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+
+svg.selectAll("rect")
+    .data(initRandArray)
+    .enter()
+    .append("rect")
+    .attr("x", function(d,i) {return i*(w/initRandArray.length)})
+    .attr("y", function(d) {return h - yScale(d)})
+    .attr("width", w / initRandArray.length - barPadding)
+    .attr("height", function(d){return yScale(d)})
+    .attr("fill", function(d) {
+    return "rgb(136, 196, " + (d * 100) + ")";
 });
+
+svg.selectAll("text")
+    .data(initRandArray)
+    .enter()
+    .append("text")
+    .text(function(d){return d})
+    .attr("x", function(d, i){return (i*(w/initRandArray.length) + 20)})
+    .attr("y", function(d) {return h - yScale(d) + 15})
+    .attr("font-family", "sans-serif")
+    .attr("fill", "white")
+
+setInterval(function() {
+    
+    newArray = randArray();
+    
+    var rects = svg.selectAll("rect")
+    
+    rects.data(newArray)
+        .enter()
+        .append("rect")
+    
+    rects.transition()
+        .ease("cubic-in-out")
+        .duration(2000)
+        .attr("x", function(d,i) {return i*(w/newArray.length)})
+        .attr("y", function(d) {return h - yScale(d)})
+        .attr("width", w / newArray.length - barPadding)
+        .attr("height", function(d){return yScale(d)})
+        .attr("fill", function(d) {
+            return "rgb(136, 196, " + (d * 100) + ")";
+        });
+    
+    var labels = svg.selectAll("text")
+    
+    labels.data(newArray)
+        .enter()
+        .append("text")
+    
+    labels.transition()
+        .ease("cubic-in-out")
+        .duration(2000)
+        .text(function(d){return d})
+        .attr("x", function(d, i){return (i*(w/newArray.length) + 20)})
+        .attr("y", function(d) {return h - yScale(d) + 15})
+        .attr("font-family", "sans-serif")
+        .attr("fill", "white")
+
+
+}, 3000)
 </script>
 </html>

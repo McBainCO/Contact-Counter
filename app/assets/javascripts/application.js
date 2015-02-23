@@ -14,13 +14,23 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-
-
-$(function(){
-	$("#doughnutChart").drawDoughnutChart(
-     jsData
-  	);
+$(document).ready(function(){
+    var donughtChartVar = $("#doughnutChart");
+    if (donughtChartVar.length > 0)
+      {
+        $.ajax({type:"GET", url: "/contacts/all", success: function(data)
+        {
+         $(function(){
+          $("#doughnutChart").drawDoughnutChart(
+              data
+            );
+          });
+        }
+      })
+    }
 });
+
+
 
 
 
